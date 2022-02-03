@@ -9,6 +9,25 @@ from .models import Event, User, Venue
 from .forms import VenueForm
 
 
+def show_venue(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    return render(request, 
+        "events/show_venue.html", 
+        {
+            "venue": venue
+        })
+
+
+def list_venues(request):
+    venue_list = Venue.objects.all()
+    return render(request, 
+        "events/venues.html", 
+        {
+            "venue_list": venue_list
+        })
+
+
+
 def add_venue(request):
     submitted = False
     if request.method == "POST":
