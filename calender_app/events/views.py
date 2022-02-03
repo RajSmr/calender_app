@@ -1,4 +1,6 @@
 from asyncio import events
+from os import name
+from re import search
 from time import time
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -7,6 +9,24 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
 from .forms import VenueForm
+
+
+def search_venues(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        venues = Venue.objects.filter(name__contains=searched)
+        return render(request, 
+        "events/search_venues.html", 
+        {
+            'searched': searched,
+            'venues': venues
+        })
+    else:
+        return render(request, 
+            "events/search_venues.html", 
+            {
+            
+            })
 
 
 def show_venue(request, venue_id):
