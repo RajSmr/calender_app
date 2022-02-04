@@ -2,13 +2,27 @@ from asyncio import events
 from os import name
 from re import search
 from time import time
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
 from .forms import VenueForm
+
+
+def update_venue(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    form = VenueForm(request.POST or None, instance=venue)
+    if form.is_valid():
+        form.save()
+        return redirect('list_venues')
+    return render(request, 
+        "events/update_venue.html", 
+        {
+            "venue": venue,
+            "form": form,
+        })
 
 
 def search_venues(request):
