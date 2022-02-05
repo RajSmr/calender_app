@@ -20,3 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
 ]
+
+# Configure Admin Title
+admin.site.site_header = "Calendar App Administration"
+admin.site.site_title = "Calendar App"
+admin.site.index_title = "Calendar Application"
