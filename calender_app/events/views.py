@@ -1,11 +1,5 @@
-from asyncio import events
-from fileinput import filename
-from os import name
-from re import T, search
-from time import time
-from urllib import response
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect, HttpResponse, FileResponse
+from django.http import HttpResponseRedirect, HttpResponse
 import calendar
 import csv
 from calendar import HTMLCalendar
@@ -15,9 +9,13 @@ from .forms import VenueForm, EventForm
 
 #PDF Import
 import io
+from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+
+# Import Pagination Stuff
+from django.core.paginator import Paginator
 
 
 # Generate Text file Venue List
@@ -188,11 +186,20 @@ def show_venue(request, venue_id):
 
 
 def list_venues(request):
-    venue_list = Venue.objects.all().order_by('name')
+    #venue_list = Venue.objects.all().order_by('name')
+    venue_list = Venue.objects.all()
+
+    # Set up pagination
+    p = Paginator(Venue.objects.all(), 2)
+    page = request.GET.get('page')
+    venues = p.get_page(page)
+
+
     return render(request, 
         "events/venues.html", 
         {
-            "venue_list": venue_list
+            "venue_list": venue_list,
+            "venues": venues,
         })
 
 
