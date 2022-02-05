@@ -2,13 +2,30 @@ from asyncio import events
 from os import name
 from re import search
 from time import time
+from urllib import response
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
 from .forms import VenueForm, EventForm
+
+
+# Generate Text file Venue List
+def venue_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=venues.txt'
+    # Designate the Model
+    venues = Venue.objects.all()
+
+    # Loop Through and Output
+    lines = []
+    for venue in venues:
+        lines.append(f'{venue.name}\n{venue.address}\n{venue.zip_code}\n{venue.phone}\n{venue.web}\n{venue.email_address}\n\n\n')
+
+    response.writelines(lines)
+    return response
 
 
 def delete_venue(request, venue_id):
