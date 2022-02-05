@@ -16,8 +16,11 @@
             <li>Venue Website: {{ event.venue.web }}</li>
             <li>Manager: {{ event.manager }}</li>
             <li>Description: {{ event.description }}</li>
-            <!-- <li>Attendees: {% for user in event.attendees.all %} {{ user }} {% endfor %} </li> -->
+            <li>Attendees: {% for user in event.attendees.all %} {{ user }} {% endfor %} </li>
           </p>
+        </div>
+        <div class="card-footer text-muted">
+          <a href="{% url 'update_event' event.id %}" class="btn btn-outline-secondary btn-sm">Update Event</a>
         </div>
       </div>
         <br><br>
