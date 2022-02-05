@@ -30,6 +30,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'venue_pdf' %}">Venues PDF File</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
         </ul>
         <form class="d-flex" method=POST action="{% url 'search_venues' %}">
           {% csrf_token %}
