@@ -6,10 +6,30 @@ from urllib import response
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 import calendar
+import csv
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
 from .forms import VenueForm, EventForm
+
+
+# Generate Text file Venue List
+def venue_csv(request):
+    response = HttpResponse(content_type='text/csc')
+    response['Content-Disposition'] = 'attachment; filename=venues.csv'
+    
+    # Create a csv writer
+    writer = csv.writer(response)
+
+    # Designate the Model
+    venues = Venue.objects.all()
+
+    # Add Column Heading
+    writer.writerow(['Venue Name', 'Address', 'Zip Code', 'Mobile No', 'Web Address', 'Email ID'])
+   
+    for venue in venues:
+        writer.writerow([venue.name, venue.address, venue.zip_code, venue.phone, venue.web, venue.email_address])
+    return response
 
 
 # Generate Text file Venue List
