@@ -9,27 +9,38 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'home' '2022' 'March' %}">March</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'list-events' %}">Events</a>
+          
+          <!-- Dropdown of Events -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Event</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'add_event' %}">Add Event</a></li>
+              <li><a class="dropdown-item" href="{% url 'list-events' %}">List of Events</a></li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_event' %}">Add Event</a>
+          <!-- Dropdown of Events -->
+          
+          <!-- Dropdown of Venues -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Venue</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'add_venue' %}">Add Venue</a></li>
+              <li><a class="dropdown-item" href="{% url 'list_venues' %}">List of Venues</a></li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_venue' %}">Add Venue</a>
+          <!-- Dropdown of Venues -->
+          
+          <!-- Dropdown of Downloads -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Downloads</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'venue_text' %}">Venues Text File</a></li>
+              <li><a class="dropdown-item" href="{% url 'venue_csv' %}">Venues CSV File</a></li>
+              <li><a class="dropdown-item" href="{% url 'venue_pdf' %}">Venues PDF File</a></li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_venues' %}">Venues</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'venue_text' %}">Venues Text File</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'venue_csv' %}">Venues CSV File</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'venue_pdf' %}">Venues PDF File</a>
-          </li>
+          <!-- Dropdown of Downloads -->
+
           {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
