@@ -7,6 +7,7 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
 from .forms import VenueForm, EventForm, EventFormAdmin
+from django.contrib import messages
 
 #PDF Import
 import io
@@ -172,8 +173,13 @@ def update_event(request, event_id):
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    event.delete()
-    return redirect('list-events')
+    if request.user == event.manager:
+        event.delete()
+        messages.success(request, ("Event Deleted Successfully!!!"))
+        return redirect('list-events')
+    else:
+        messages.success(request, ("Your aren't Authorized Person to Delete it!!"))
+        return redirect('list-events')
 
 
 
