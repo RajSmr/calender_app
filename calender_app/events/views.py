@@ -1,3 +1,4 @@
+from asyncio import events
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 import calendar
@@ -5,7 +6,7 @@ import csv
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, User, Venue
-from .forms import VenueForm, EventForm
+from .forms import VenueForm, EventForm, EventFormAdmin
 
 #PDF Import
 import io
@@ -112,12 +113,26 @@ def search_venues(request):
 def add_event(request):
     submitted = False
     if request.method == "POST":
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add_event?submitted=True')
+        if request.user.is_superuser:
+            form = EventFormAdmin(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
+        else:
+            form = EventForm(request.POST)
+            if form.is_valid():
+                event = form.save(commit=False)
+                Event.manager = request.user # Logged in User
+                event.save()
+                #form.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
     else:
-        form = EventForm
+        # Just going to Page...
+        if request.user.is_superuser:
+            form = EventFormAdmin
+        else:
+            form = EventForm
+        
         if 'submitted' in request.GET:
             submitted = True
 
@@ -140,7 +155,10 @@ def all_events(request):
 
 def update_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    form = EventForm(request.POST or None, instance=event)
+    if request.user.is_superuser:
+        form = EventFormAdmin(request.POST or None, instance=event)
+    else:
+        form = EventForm(request.POST or None, instance=event)
     if form.is_valid():
         form.save()
         return redirect('list-events')
