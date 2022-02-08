@@ -1,11 +1,14 @@
-from asyncio import events
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 import calendar
 import csv
 from calendar import HTMLCalendar
 from datetime import datetime
-from .models import Event, User, Venue
+from .models import Event, Venue
+
+# Import User Model From Django
+from django.contrib.auth.models import User
+
 from .forms import VenueForm, EventForm, EventFormAdmin
 from django.contrib import messages
 
@@ -85,10 +88,12 @@ def delete_venue(request, venue_id):
 
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
+    venue_owner = User.objects.get(pk=venue.owner)
     return render(request, 
         "events/show_venue.html", 
         {
-            "venue": venue
+            "venue": venue,
+            "venue_owner": venue_owner,
         })
 
 
