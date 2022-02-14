@@ -153,7 +153,7 @@ def add_event(request):
 
 
 def all_events(request):
-    event_list = Event.objects.all().order_by('name')
+    event_list = Event.objects.all().order_by('-event_date')
     return render(request, 
         "events/event_list.html", 
         {
