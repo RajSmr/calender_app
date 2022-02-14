@@ -200,6 +200,21 @@ def my_events(request):
         return redirect('home')
 
 
+def search_events(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        events = Event.objects.filter(name__contains=searched)
+        return render(request, 
+        "events/search_events.html", 
+        {
+            'searched': searched,
+            'events': events
+        })
+    else:
+        return render(request, 
+            "events/search_events.html", {})
+
+
 # Generate Text file Venue List.....
 def venue_pdf(request):
     # Create Bytestream buffer
