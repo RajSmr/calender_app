@@ -1,3 +1,4 @@
+from asyncio import events
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 import calendar
@@ -186,6 +187,17 @@ def delete_event(request, event_id):
         messages.success(request, ("Your aren't Authorized Person to Delete it!!"))
         return redirect('list-events')
 
+
+def my_events(request):
+    if request.user.is_authenticated:
+        me = request.user.id
+        events = Event.objects.filter(attendees=me)
+        return render(request, "events/my_events.html", {
+            "events": events
+        })
+    else:
+        messages.success(request, ("Your aren't Authorized Person to View this Event!!"))
+        return redirect('home')
 
 
 # Generate Text file Venue List.....
