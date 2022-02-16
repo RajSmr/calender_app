@@ -333,3 +333,27 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
             "event_list": event_list,
         })
 
+
+# Admin Event Approval Page
+def admin_approval(request):
+    event_list = Event.objects.all().order_by('-event_date')
+    if request.user.is_superuser:
+        if request.method == "POST":
+            id_list = request.POST.getlist("boxes")
+            # Uncheck all events
+            event_list.update(approved=False)
+            # Update this to DB
+            for x in id_list:
+                Event.objects.filter(pk=int(x)).update(approved=True)
+            messages.success(request, ("Approval is Done"))
+            return redirect("list-events")
+        else:
+            return render(request, "events/admin_approval.html", {
+                "event_list": event_list,
+            })
+    else:
+        messages.success(request, ("You are not Authorized to access this Page"))
+        return redirect("home")
+    
+    #return render(request, "events/admin_approval.html", {})
+

@@ -48,6 +48,11 @@
           <!-- Dropdown of Downloads -->
 
           {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_approval' %}">Admin Approval</a>
+              </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
