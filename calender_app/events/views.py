@@ -216,6 +216,14 @@ def search_events(request):
             "events/search_events.html", {})
 
 
+# Show Event
+def show_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    return render(request, "events/show_event.html", {
+        "event": event,
+    })
+
+
 # Generate Text file Venue List.....
 def venue_pdf(request):
     # Create Bytestream buffer
@@ -336,6 +344,9 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
 
 # Admin Event Approval Page
 def admin_approval(request):
+    # Get the Venues
+    venue_list = Venue.objects.all()
+    
     # Get Counts
     event_count = Event.objects.all().count()
     venue_count = Venue.objects.all().count()
@@ -358,10 +369,26 @@ def admin_approval(request):
                 "event_count": event_count,
                 "venue_count": venue_count,
                 "user_count": user_count,
+                "venue_list": venue_list,
             })
     else:
         messages.success(request, ("You are not Authorized to access this Page"))
         return redirect("home")
     
     #return render(request, "events/admin_approval.html", {})
+
+
+# Show Events With Venue ID
+def venue_events(request, venue_id):
+    # Grab the venue
+    venue = Venue.objects.get(id=venue_id)
+    # Grab the events from that Venue ID
+    events = venue.event_set.all()
+    if events:
+        return render(request, "events/venue_events.html", {
+            "events": events,
+        })
+    else:
+        messages.success(request, ("There are No Events at this Venue!!!!"))
+        return redirect("admin_approval")
 
