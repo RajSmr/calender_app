@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User as users
 from datetime import date
@@ -34,6 +35,7 @@ class Event(models.Model):
     manager = models.ForeignKey(users, blank=True, null=True, on_delete=models.SET_NULL)
     description = models.TextField(blank = True)
     attendees = models.ManyToManyField(User, blank= True)
+    approved = models.BooleanField('Approved', default=False)
 
     def __str__(self):
         return self.name
